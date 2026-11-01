@@ -1,0 +1,25 @@
+name: Text-to-SQL checks
+on:
+  pull_request:
+  push:
+    branches: [main, feat/d1-text-to-sql]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run test:d1
+      - run: npx tsc --noEmit
+      - run: npm run data:import:local
+      - run: npm run test:data
+      - run: npm run build
+      - run: npm run worker:check

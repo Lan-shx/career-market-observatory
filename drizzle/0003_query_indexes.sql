@@ -1,0 +1,1 @@
+CREATE INDEX `jobs_summary_idx` ON `jobs` (`dataset_id`,`mainland`,`city_known`,`salary_valid`,`salary_midpoint`,`company`,`education_level`,`exp_group`,`id`);

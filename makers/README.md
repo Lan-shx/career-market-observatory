@@ -1,5 +1,8 @@
 # 职业观测站：腾讯云 Makers 部署
 
+## 兼容版说明
+本目录保留 PostgreSQL 会话存储及浏览器执行工具的协议，状态标识为 `legacy-client`。新增的岗位数据库、服务端 SQL 和证据分页属于 Cloudflare D1 版，运行方式见根目录 [TEXT-TO-SQL.md](../TEXT-TO-SQL.md)。两套运行方式的 API 续接协议不同，请使用各自匹配的前端和服务入口。
+
 本目录是职业观测站的独立 Makers 入口。保留 Sites 第 28 版前端及完整的 69,465 条历史招聘样本；不更新采集日期或更换数据。源码仓库为 `Lan-shx/career-market-observatory`，不使用 `resume-radar`。
 
 ## 当前进度与限制

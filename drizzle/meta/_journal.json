@@ -15,6 +15,20 @@
       "when": 1791903681869,
       "tag": "0001_fair_wolfsbane",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1793424591627,
+      "tag": "0002_jobs",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1793424805401,
+      "tag": "0003_query_indexes",
+      "breakpoints": true
     }
   ]
 }

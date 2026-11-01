@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
-import {researchRequest} from './lib/research-server.mjs';
+import {legacyResearchRequest as researchRequest} from './lib/research-server.mjs';
 const sql=new DatabaseSync(':memory:');
 sql.exec('CREATE TABLE research_turns(id TEXT PRIMARY KEY,sid TEXT,payload TEXT,status TEXT,expires INTEGER)');
 const DB={prepare(q){return {bind(...args){return {async first(){return sql.prepare(q).get(...args)||null},async run(){return sql.prepare(q).run(...args)}}}}}};
