@@ -11,7 +11,7 @@ parser.add_argument('--interim', action='store_true')
 args = parser.parse_args()
 raw = Path(args.pool).read_bytes()
 pool = json.loads(raw)
-manifest = json.loads((ROOT / 'dist/jobs.json').read_text(encoding='utf8'))
+manifest = json.loads((ROOT / 'public/jobs.json').read_text(encoding='utf8'))
 today = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).date()
 start = today.replace(year=today.year - 1).isoformat()
 end = today.isoformat()
@@ -54,7 +54,7 @@ rows.sort(key=lambda r: r['url'])
 if not args.interim and len(rows) < args.minimum:
     raise SystemExit(f'Target gate failed: {len(rows)} verified rows < {args.minimum}')
 assert len(rows) >= manifest['rowCount'], 'Do not replace the site with a smaller dataset'
-data = ROOT / 'dist/data'
+data = ROOT / 'public/data'
 chunks = []
 for offset in range(0, len(rows), 5000):
     name = f'jobs-{offset // 5000:02d}.json'
@@ -67,6 +67,6 @@ manifest['sampling'] = dict(target=args.minimum, candidateCount=len(pool['rows']
 manifest['methodology']['scope'] = '大陆经管、产品与AI应用职业方向的公开招聘便利样本。保留全部符合口径的去重记录，来源查询、排序与匿名可见范围具有偏差，不代表全市场。'
 manifest['methodology']['collection'] = '底座包含此前快照与本轮新增采集；每条保留实际采集时间。底座整理日期不能当作所有岗位重新核验日期。'
 manifest['validation'] = dict(date=end, explicitUnexpired=sum(bool(r.get('expiresAt')) and r['expiresAt'] >= end for r in rows), explicitExpired=sum(bool(r.get('expiresAt')) and r['expiresAt'] < end for r in rows), unknownExpiry=sum(not r.get('expiresAt') for r in rows), sources=dict(collections.Counter(r['source'] for r in rows)), targetReached=len(rows) >= args.minimum)
-(ROOT / 'dist/jobs.json').write_text(json.dumps(manifest, ensure_ascii=False, separators=(',', ':')), encoding='utf8')
+(ROOT / 'public/jobs.json').write_text(json.dumps(manifest, ensure_ascii=False, separators=(',', ':')), encoding='utf8')
 (ROOT / 'expanded-data-validation.json').write_text(json.dumps(dict(rows=len(rows), target=args.minimum, shortfall=max(0, args.minimum-len(rows)), **manifest['validation']), ensure_ascii=False, indent=2), encoding='utf8')
 print(json.dumps(dict(rows=len(rows), target=args.minimum, shortfall=max(0, args.minimum-len(rows)), **manifest['validation']), ensure_ascii=False))

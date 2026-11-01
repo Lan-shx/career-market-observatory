@@ -1,4 +1,4 @@
-import { researchRequest } from '../../../runtime/research-server.mjs';
+import { legacyResearchRequest as researchRequest } from '../../../runtime/research-server.mjs';
 import { getResearchDatabase } from '../../../lib/postgres.mjs';
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), {

@@ -1,10 +1,12 @@
 """Verify published data integrity; never fill missing recruitment fields."""
 import json,collections,urllib.parse,datetime,gzip,hashlib,sys,re
 from pathlib import Path
-b=json.loads(Path('dist/jobs.json').read_text(encoding='utf8'));rs=[]
+ROOT=Path(__file__).resolve().parent
+PUBLIC=ROOT/'public'
+b=json.loads((PUBLIC/'jobs.json').read_text(encoding='utf8'));rs=[]
 for chunk in b['chunks']:
- payload=gzip.decompress((Path('dist')/chunk['gzipPath']).read_bytes())
- assert payload==(Path('dist')/chunk['jsonPath']).read_bytes()
+ payload=gzip.decompress((PUBLIC/chunk['gzipPath']).read_bytes())
+ assert payload==(PUBLIC/chunk['jsonPath']).read_bytes()
  assert hashlib.sha256(payload).hexdigest()==chunk['sha256']
  data=json.loads(payload);assert len(data)==chunk['rowCount'];rs+=data
 assert len(rs)==b['rowCount']
@@ -43,5 +45,6 @@ for r in rs:
   if r.get('salaryLowerBound') is not None and r['salaryMax'] is None:assert r['salaryMin'] is None
  assert not any(s in r['title'] for s in ['微生物高级研究员','资深合成研究员'])
 summary={'rows':len(rs),'companies':len({r['company'] for r in rs}),'salary':sum(r['salaryMin'] is not None for r in rs),'sources':dict(collections.Counter(r['source'] for r in rs)),'directions':len({r['occupation'] for r in rs}),'aiProduct':sum(r['occupation']=='0' for r in rs),'product':sum(r['occupation']=='5' for r in rs),'businessAnalysis':sum(r['occupation']=='14' for r in rs),'aiApplication':sum(r['occupation'] in ['4','28','29'] for r in rs)}
-Path('business-collection-summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf8')
+(ROOT/'.textsql').mkdir(exist_ok=True)
+(ROOT/'.textsql/data-validation.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf8')
 print(json.dumps(summary,ensure_ascii=False))

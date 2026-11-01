@@ -37,6 +37,8 @@
 
 ## 实现思路
 
+Cloudflare 版现已提供受限 Text-to-SQL：模型生成参数化查询，Worker 在 D1 内执行并计算统计、返回岗位证据。数据迁移、本地运行、API、安全边界与上线步骤见 [Text-to-SQL 实施与运行说明](TEXT-TO-SQL.md)。本地规则查询、图表和离线导出继续使用公开分片。Makers 版保留原 PostgreSQL 会话适配与浏览器工具查询协议。
+
 ```mermaid
 flowchart LR
   A["公开招聘记录"] --> B["清洗、去重与口径统一"]

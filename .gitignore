@@ -28,3 +28,4 @@ dist/
 
 # Generated Makers artifacts; source and secrets stay outside the public output.
 makers/runtime/
+.textsql/

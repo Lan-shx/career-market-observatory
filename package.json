@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "install:ci": "node scripts/install-ci.mjs",
@@ -12,7 +12,18 @@
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "prebuild": "node scripts/sync-assistant-renderer.mjs"
+    "prebuild": "node scripts/sync-assistant-renderer.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:data": "node test/full-data.mjs",
+    "test:d1": "node test/d1-integration.mjs",
+    "data:verify": "node scripts/import-jobs.mjs",
+    "data:import:local": "node scripts/import-jobs.mjs --local",
+    "data:export:d1": "node scripts/import-jobs.mjs --sql",
+    "dev:research": "node --env-file-if-exists=.env scripts/dev-research.mjs",
+    "worker:check": "wrangler deploy --config wrangler.research.jsonc --dry-run --outdir .textsql/worker",
+    "db:migrate:local": "wrangler d1 migrations apply DB --config wrangler.research.jsonc --local",
+    "data:import:d1:local": "node scripts/d1-import.mjs --local",
+    "data:import:d1:remote": "node scripts/d1-import.mjs --remote"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -55,6 +66,8 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.4",
     "json-rpc-2.0": "1.7.1",
+    "jsonc-parser": "3.3.1",
+    "miniflare": "4.20260515.0",
     "raw-body": "3.0.2",
     "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",
